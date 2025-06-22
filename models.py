@@ -7,74 +7,13 @@ import torch.nn.functional as F
 # can use the below import should you choose to initialize the weights of your Net
 import torch.nn.init as I
 
-'''
-class Net(nn.Module):
-
-    def __init__(self, drop_p=0.5):
-        super(Net, self).__init__()
-
-
-        #############################################
-        # CNN --> convergence problems and also with overfitting... :-(
-        #############################################
-        
-        #ConvLayer output size = (Input size - Kernel size + 2 * Padding) / Stride + 1
-        
-        # (224-3+2*0)/1 + 1 = 222 => After pool = 111
-        self.conv1 = nn.Conv2d(in_channels=1, out_channels=8, kernel_size=3, stride=1, padding=0, bias=False)
-        
-        # (111-3+2*0)/1 + 1 = 109 => After pool = 54
-        self.conv2 = nn.Conv2d(in_channels=8, out_channels=16, kernel_size=3, stride=1, padding=0, bias=False)
-
-        # (54-3+2*0)/1 + 1 = 52 => After pool = 26
-        self.conv3 = nn.Conv2d(in_channels=16, out_channels=32, kernel_size=3, stride=1, padding=0)
-
-        # (26-3+2*0)/1 + 1 = 24 => After pool = 12
-        self.conv4 = nn.Conv2d(in_channels=32, out_channels=64, kernel_size=3, stride=1, padding=0)
-        
-        # (12-3+2*0)/1 + 1 = 10 => After pool = 5
-        self.conv5 = nn.Conv2d(in_channels=64, out_channels=128, kernel_size=3, stride=1, padding=0)
-
-        self.pool = nn.MaxPool2d(kernel_size=2, stride=2)
-        
-        # Fully connected layer
-        self.fc1 = nn.Linear(128*5*5, 1024)
-        self.fc2 = nn.Linear(1024, 512)
-        self.drop = nn.Dropout(drop_p)
-        self.fc3 = nn.Linear(512, 136)
-        
-
-        
-    def forward(self, x):
-        
-        x = F.relu(self.pool(self.conv1(x)))
-        x = F.relu(self.pool(self.conv2(x)))
-        x = F.relu(self.pool(self.conv3(x)))
-        x = F.relu(self.pool(self.conv4(x)))
-        x = F.relu(self.pool(self.conv5(x)))
-        
-        # prep for linear layer
-        # this line of code is the equivalent of Flatten in Keras
-        x = x.view(x.size(0), -1)
-        #print("Dimension: ", x.size(1) )
-        
-        # two linear layers with dropout in between
-        x = self.drop(F.relu(self.fc1(x)))
-        x = self.drop(F.relu(self.fc2(x)))
-        x = self.fc3(x) 
-                
-        # a modified x, having gone through all the layers of your model, should be returned
-        return x  
-'''
-
-
 class Net(nn.Module):
 
     def __init__(self, drop_p=0.5):
         super(Net, self).__init__()
 
         #############################################
-        # CNN: with batch normalization -> everthing good :-)
+        # CNN: with batch normalization -> everything good :-)
         #############################################
         
         #ConvLayer output size = (Input size - Kernel size + 2 * Padding) / Stride + 1
@@ -130,3 +69,62 @@ class Net(nn.Module):
         # a modified x, having gone through all the layers of your model, should be returned
         return x  
 
+'''
+class Net(nn.Module):
+
+    def __init__(self, drop_p=0.5):
+        super(Net, self).__init__()
+
+
+        #############################################
+        # CNN --> convergence problems and also overfitting... :-(
+        #############################################
+        
+        #ConvLayer output size = (Input size - Kernel size + 2 * Padding) / Stride + 1
+        
+        # (224-3+2*0)/1 + 1 = 222 => After pool = 111
+        self.conv1 = nn.Conv2d(in_channels=1, out_channels=8, kernel_size=3, stride=1, padding=0, bias=False)
+        
+        # (111-3+2*0)/1 + 1 = 109 => After pool = 54
+        self.conv2 = nn.Conv2d(in_channels=8, out_channels=16, kernel_size=3, stride=1, padding=0, bias=False)
+
+        # (54-3+2*0)/1 + 1 = 52 => After pool = 26
+        self.conv3 = nn.Conv2d(in_channels=16, out_channels=32, kernel_size=3, stride=1, padding=0)
+
+        # (26-3+2*0)/1 + 1 = 24 => After pool = 12
+        self.conv4 = nn.Conv2d(in_channels=32, out_channels=64, kernel_size=3, stride=1, padding=0)
+        
+        # (12-3+2*0)/1 + 1 = 10 => After pool = 5
+        self.conv5 = nn.Conv2d(in_channels=64, out_channels=128, kernel_size=3, stride=1, padding=0)
+
+        self.pool = nn.MaxPool2d(kernel_size=2, stride=2)
+        
+        # Fully connected layer
+        self.fc1 = nn.Linear(128*5*5, 1024)
+        self.fc2 = nn.Linear(1024, 512)
+        self.drop = nn.Dropout(drop_p)
+        self.fc3 = nn.Linear(512, 136)
+        
+
+        
+    def forward(self, x):
+        
+        x = F.relu(self.pool(self.conv1(x)))
+        x = F.relu(self.pool(self.conv2(x)))
+        x = F.relu(self.pool(self.conv3(x)))
+        x = F.relu(self.pool(self.conv4(x)))
+        x = F.relu(self.pool(self.conv5(x)))
+        
+        # prep for linear layer
+        # this line of code is the equivalent of Flatten in Keras
+        x = x.view(x.size(0), -1)
+        #print("Dimension: ", x.size(1) )
+        
+        # two linear layers with dropout in between
+        x = self.drop(F.relu(self.fc1(x)))
+        x = self.drop(F.relu(self.fc2(x)))
+        x = self.fc3(x) 
+                
+        # a modified x, having gone through all the layers of your model, should be returned
+        return x  
+'''
